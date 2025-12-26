@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 
     {% block stylesheets %}{% endblock %}
+            {{ encore_entry_link_tags('app') }}
 </head>
 <body>
     {% block body %}{% endblock %}
@@ -25,5 +26,6 @@
     <script src="{{ asset('js/stimulus_bootstrap.js') }}"></script>
 
     {% block javascripts %}{% endblock %}
+            {{ encore_entry_script_tags('app') }}
 </body>
 </html>
