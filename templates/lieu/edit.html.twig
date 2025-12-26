@@ -1,0 +1,22 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Modifier Lieu - Administration{% endblock %}
+
+{% block page_title %}Modifier un lieu{% endblock %}
+
+{% block body %}
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="margin-bottom: 20px;">Modifier le lieu</h2>
+
+        {{ include('lieu/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+        <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" form="lieu_form">Mettre à jour</button>
+            <a href="{{ path('app_lieu_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+
+        <div style="margin-top: 40px;">
+            {{ include('lieu/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

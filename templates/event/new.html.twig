@@ -1,0 +1,18 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Nouvel Événement - Administration{% endblock %}
+
+{% block page_title %}Ajouter un événement{% endblock %}
+
+{% block body %}
+    <div style="max-width: 900px; margin: 0 auto;">
+        <h2 style="margin-bottom: 20px;">Créer un nouvel événement</h2>
+
+        {{ include('event/_form.html.twig') }}
+
+        <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" form="event_form">Enregistrer</button>
+            <a href="{{ path('app_event_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+    </div>
+{% endblock %}

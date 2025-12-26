@@ -1,0 +1,26 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block page_title %}Tableau de bord{% endblock %}
+
+{% block body %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px;">
+        <div class="card" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+            <h3>Catégories</h3>
+            <p style="font-size: 2.5rem; font-weight: 600; color: #3b82f6;">{{ categories|length }}</p>
+        </div>
+
+        <div class="card" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+            <h3>Événements</h3>
+            <p style="font-size: 2.5rem; font-weight: 600; color: #3b82f6;">{{ events|length }}</p>
+        </div>
+
+        <div class="card" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+            <h3>Réservations</h3>
+            <p style="font-size: 2.5rem; font-weight: 600; color: #3b82f6;">{{ reservations|length }}</p>
+        </div>
+
+        <!-- Ajoute autant de cartes que tu veux -->
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Modifier Réservation - Administration{% endblock %}
+
+{% block page_title %}Modifier une réservation{% endblock %}
+
+{% block body %}
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="margin-bottom: 20px;">Modifier la réservation</h2>
+
+        {{ include('reservation/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+        <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" form="reservation_form">Mettre à jour</button>
+            <a href="{{ path('app_reservation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+
+        <div style="margin-top: 40px;">
+            {{ include('reservation/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

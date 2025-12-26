@@ -1,0 +1,18 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Nouveau Lieu - Administration{% endblock %}
+
+{% block page_title %}Ajouter un lieu{% endblock %}
+
+{% block body %}
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="margin-bottom: 20px;">Créer un nouveau lieu</h2>
+
+        {{ include('lieu/_form.html.twig') }}
+
+        <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" form="lieu_form">Enregistrer</button>
+            <a href="{{ path('app_lieu_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+    </div>
+{% endblock %}

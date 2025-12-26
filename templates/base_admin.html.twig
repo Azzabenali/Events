@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin - Gestion{% endblock %}</title>
+
+    <!-- CSS global -->
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+
+    <!-- Police Google Fonts (optionnel mais rend le design plus pro) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="admin-body">
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Admin Panel</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="{{ path('admin_dashboard') }}" class="{% if app.request.attributes.get('_route') == 'admin_dashboard' %}active{% endif %}">Tableau de bord</a></li>
+                <li><a href="{{ path('app_category_index') }}" class="{% if app.request.attributes.get('_route') starts with 'app_category_' %}active{% endif %}">Catégories</a></li>
+                <li><a href="{{ path('app_conference_index') }}" class="{% if app.request.attributes.get('_route') starts with 'app_conference_' %}active{% endif %}">Conférences</a></li>
+                <li><a href="{{ path('app_event_index') }}" class="{% if app.request.attributes.get('_route') starts with 'app_event_' %}active{% endif %}">Événements</a></li>
+                <li><a href="{{ path('app_lieu_index') }}" class="{% if app.request.attributes.get('_route') starts with 'app_lieu_' %}active{% endif %}">Lieux</a></li>
+                <li><a href="{{ path('app_reservation_index') }}" class="{% if app.request.attributes.get('_route') starts with 'app_reservation_' %}active{% endif %}">Réservations</a></li>
+                <li><a href="{{ path('app_ticket_index') }}" class="{% if app.request.attributes.get('_route') starts with 'app_ticket_' %}active{% endif %}">Tickets</a></li>
+                <li><a href="{{ path('app_user_index') }}" class="{% if app.request.attributes.get('_route') starts with 'app_user_' %}active{% endif %}">Utilisateurs</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <header class="header">
+            <h1>{% block page_title %}Tableau de bord{% endblock %}</h1>
+            <div class="user-info">
+                <span>Bienvenue, {{ app.user ? app.user.name : 'Admin' }}</span>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            {% block body %}{% endblock %}
+        </div>
+    </main>
+
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

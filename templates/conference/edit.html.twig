@@ -1,0 +1,22 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Modifier Conférence - Administration{% endblock %}
+
+{% block page_title %}Modifier une conférence{% endblock %}
+
+{% block body %}
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="margin-bottom: 20px;">Modifier la conférence</h2>
+
+        {{ include('conference/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+        <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" form="conference_form">Mettre à jour</button>
+            <a href="{{ path('app_conference_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+
+        <div style="margin-top: 40px;">
+            {{ include('conference/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

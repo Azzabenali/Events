@@ -1,0 +1,44 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Réservations - Administration{% endblock %}
+
+{% block page_title %}Gestion des Réservations{% endblock %}
+
+{% block body %}
+    <div style="margin-bottom: 25px;">
+        <a href="{{ path('app_reservation_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter une réservation
+        </a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date de réservation</th>
+                <th>Nombre de tickets</th>
+                <th>Prix total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.id }}</td>
+                    <td>{{ reservation.resdate ? reservation.resdate|date('d/m/Y à H:i') : 'Non défini' }}</td>
+                    <td>{{ reservation.numbertickets }}</td>
+                    <td>{{ reservation.totalprice ? reservation.totalprice ~ ' €' : '-' }}</td>
+                    <td>
+                        <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" class="btn btn-secondary">Voir</a>
+                        <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-primary">Modifier</a>
+                        {{ include('reservation/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 20px;">Aucune réservation trouvée.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

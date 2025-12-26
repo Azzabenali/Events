@@ -1,0 +1,58 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Événements - Administration{% endblock %}
+
+{% block page_title %}Gestion des Événements{% endblock %}
+
+{% block body %}
+    <div style="margin-bottom: 25px;">
+        <a href="{{ path('app_event_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter un événement
+        </a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Lieu</th>
+                <th>Prix</th>
+                <th>Image</th>
+                <th>Places</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.id }}</td>
+                    <td>{{ event.titre }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>{{ event.date ? event.date|date('d/m/Y à H:i') : 'Non défini' }}</td>
+                    <td>{{ event.lieu ? event.lieu.nom : 'Non défini' }}</td>
+                    <td>{{ event.prix ? event.prix ~ ' €' : '-' }}</td>
+                    <td>
+                        {% if event.image %}
+                            <img src="{{ asset('uploads/' ~ event.image) }}" alt="{{ event.titre }}" style="width: 80px; height: 50px; object-fit: cover; border-radius: 4px;">
+                        {% else %}
+                            Pas d'image
+                        {% endif %}
+                    </td>
+                    <td>{{ event.nombreDePlaces }}</td>
+                    <td>
+                        <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-secondary">Voir</a>
+                        <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-primary">Modifier</a>
+                        {{ include('event/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 20px;">Aucun événement trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

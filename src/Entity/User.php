@@ -4,14 +4,13 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\EntityManagerInterface; // ✅ CORRECT
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -23,114 +22,79 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
     #[ORM\Column]
     private bool $isVerified = false;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
     /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
+     * @var Collection<int, Reservation>
      */
-    public function getUserIdentifier(): string
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
+    private Collection $reservations;
+
+    public function __construct()
     {
-        return (string) $this->email;
+        $this->reservations = new ArrayCollection();
     }
+
+    public function getId(): ?int { return $this->id; }
+    public function getEmail(): ?string { return $this->email; }
+    public function setEmail(string $email): static { $this->email = $email; return $this; }
+
+    public function getUserIdentifier(): string { return (string)$this->email; }
+
+    public function getRoles(): array {
+        $roles = $this->roles;
+        if (!in_array('ROLE_USER', $roles)) $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static { $this->roles = $roles; return $this; }
+
+    public function getPassword(): ?string { return $this->password; }
+    public function setPassword(string $password): static { $this->password = $password; return $this; }
 
     /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-{
-    $roles = $this->roles;
-    if (!in_array('ROLE_USER', $roles)) {
-        $roles[] = 'ROLE_USER';
-    }
-    return array_unique($roles);
-}
-
-public function setRoles(array $roles): self
-{
-    $this->roles = $roles;
-    return $this;
-}
-
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
+     * Serialize password safely (Symfony 7.3+)
      */
     public function __serialize(): array
     {
-        $data = (array) $this;
+        $data = (array)$this;
         $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
-
         return $data;
     }
 
-    #[\Deprecated]
-    public function eraseCredentials(): void
-    {
-        // @deprecated, to be removed when upgrading to Symfony 8
-    }
+    public function eraseCredentials(): void {}
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+    public function getName(): ?string { return $this->name; }
+    public function setName(string $name): static { $this->name = $name; return $this; }
 
-    public function setName(string $name): static
-    {
-        $this->name = $name;
+    public function getIsVerified(): bool { return $this->isVerified; }
+    public function setIsVerified(bool $isVerified): static { $this->isVerified = $isVerified; return $this; }
 
+    /** @return Collection<int, Reservation> */
+    public function getReservations(): Collection { return $this->reservations; }
+
+    public function addReservation(Reservation $reservation): static {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setUser($this);
+        }
         return $this;
     }
 
- 
-
+    public function removeReservation(Reservation $reservation): static {
+        if ($this->reservations->removeElement($reservation)) {
+            if ($reservation->getUser() === $this) $reservation->setUser(null);
+        }
+        return $this;
+    }
 }
