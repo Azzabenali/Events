@@ -40,4 +40,34 @@ class EventRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+public function findByFilters(?int $category, ?int $lieu, ?string $date, ?float $prix)
+{
+    $qb = $this->createQueryBuilder('e')
+        ->leftJoin('e.category', 'c')
+        ->leftJoin('e.lieu', 'l');
+
+    if ($category !== null) {
+        $qb->andWhere('c.id = :cat')
+           ->setParameter('cat', $category);
+    }
+
+    if ($lieu !== null) {
+        $qb->andWhere('l.id = :lieu')
+           ->setParameter('lieu', $lieu);
+    }
+
+    if ($date !== null) {
+        $qb->andWhere('DATE(e.date) = :date')
+           ->setParameter('date', $date);
+    }
+
+    if ($prix !== null) {
+        $qb->andWhere('e.prix <= :prix')
+           ->setParameter('prix', $prix);
+    }
+
+    return $qb->getQuery()->getResult();
+}
+
+
 }

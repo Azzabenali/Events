@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+        <style>
+            body {
+                background-color: #f7f1f1ff; /* ton bleu foncé/gris foncé */
+                color: #000000ff; /* texte blanc pour contraster */
+            }
+        </style>
+    {% endblock %}
+
+{% block title %}{{ event.titre }}{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="card shadow-lg border-0">
+        <div class="row g-0">
+<div class="col-md-5 position-relative">
+    <img  
+        src="{{ asset('images/' ~ event.image) }}" 
+        alt="{{ event.titre }}"
+        style="
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        "
+    >
+</div>
+
+
+            <div class="col-md-7">
+                <div class="card-body p-4">
+                    <span class="badge bg-primary mb-2">
+                        {{ event.category.name }}
+                    </span>
+
+                    <h2 class="card-title fw-bold">{{ event.titre }}</h2>
+
+                    <p class="text-muted">
+                        📍 {{ event.lieu.nom }} – {{ event.lieu.adresse }}
+                    </p>
+
+                    <p class="mt-3">{{ event.description }}</p>
+
+                    <ul class="list-group list-group-flush my-3">
+                        <li class="list-group-item">📅 Date : {{ event.date|date('d/m/Y') }}</li>
+                        <li class="list-group-item">💰 Prix : {{ event.prix }} DT</li>
+                        <li class="list-group-item">
+                            🎟 Places disponibles : {{ event.nombreDePlaces }}
+                        </li>
+                    </ul>
+
+                    <a href="{{ path('client_event_index') }}"
+                       class="btn btn-outline-secondary mt-3">
+                        ⬅ Retour aux événements
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

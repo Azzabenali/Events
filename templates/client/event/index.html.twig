@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+        <style>
+            body {
+                background-color: #f7f1f1ff; /* ton bleu foncé/gris foncé */
+                color: #000000ff; /* texte blanc pour contraster */
+            }
+        </style>
+    {% endblock %}
+{% block title %}Événements{% endblock %}
+
+{% block body %}
+
+<form method="get" class="premium-filter mb-5">
+    <div class="filter-card">
+
+        <select name="category">
+            <option value="">🎯 Catégorie</option>
+            {% for c in categories %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="lieu">
+            <option value="">📍 Lieu</option>
+            {% for l in lieux %}
+                <option value="{{ l.id }}">{{ l.nom }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="date" name="date">
+        <input type="number" name="prix" placeholder="💰 Prix max">
+
+        <button type="submit">Filtrer</button>
+
+    </div>
+</form>
+
+
+
+
+
+<div class="container py-5">
+
+    <h1 class="text-center mb-5">Nos Événements</h1>
+
+    {% if events is empty %}
+        <div class="alert alert-info text-center">
+            Aucun événement disponible
+        </div>
+    {% else %}
+        <div class="row g-4">
+            {% for event in events %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+
+                        {# Image par défaut si tu n'en utilises pas encore #}
+<img 
+    src="{{ asset('images/' ~ event.image) }}"
+    class="card-img-top"
+    alt="{{ event.titre }}"
+>
+
+
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ event.titre }}</h5>
+
+                            <p class="card-text text-muted">
+                                {{ event.description|length > 100
+                                    ? event.description|slice(0, 100) ~ '...'
+                                    : event.description
+                                }}
+                            </p>
+
+                            <ul class="list-unstyled small mb-3">
+                                <li>📅 <strong>Date :</strong> {{ event.date|date('d/m/Y') }}</li>
+                                <li>📍 <strong>Lieu :</strong> {{ event.lieu.nom }}</li>
+                                <li>🏷️ <strong>Catégorie :</strong> {{ event.category.name }}</li>
+                                <li>💰 <strong>Prix :</strong> {{ event.prix }} DT</li>
+                            </ul>
+
+                            <a 
+                                href="{{ path('client_event_show', { id: event.id }) }}"
+                                class="btn btn-primary mt-auto"
+                            >
+                                Voir détails
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
